@@ -16,6 +16,7 @@
 #include <QLabel>
 #include <QPainter>
 
+#include "snapwindows.h"
 #include "utils.h"
 
 // Set some initial window size constraints
@@ -121,9 +122,9 @@ ToolbarWindow::ToolbarWindow(QWidget *parent)
 
     auto expGroup = new QGroupBox("Experiments", this);
     auto expLayout = new QVBoxLayout(expGroup);
-    auto otherButton = new QPushButton("Magnetic Windows", expGroup);
+    auto snapWinButton = new QPushButton("Snap-Attach Windows", expGroup);
 
-    expLayout->addWidget(otherButton);
+    expLayout->addWidget(snapWinButton);
     expLayout->addStretch(1);
     expGroup->setLayout(expLayout);
 
@@ -204,6 +205,18 @@ ToolbarWindow::ToolbarWindow(QWidget *parent)
         loadSelectedWinPositionProfile();
     });
 
+    // create snap windows
+    m_snapWinPrim = new PrimarySnapWindow;
+    m_snapWinSec = new SecondarySnapWindow;
+    m_snapWinPrim->setSecondaryWindow(m_snapWinSec);
+    m_snapWinSec->setPrimaryWindow(m_snapWinPrim);
+
+    connect(snapWinButton, &QPushButton::clicked, this, [this, snapWinButton] {
+        m_snapWinPrim->show();
+        m_snapWinSec->show();
+        m_snapWinPrim->move(snapWinButton->mapToGlobal(snapWinButton->pos()) + QPoint(0, snapWinButton->height()));
+    });
+
     // Add some label texts
     auto mainLayout = new QVBoxLayout(m_mainWindow.get());
     auto label = new RotatedLabel("Some very important content", m_mainWindow.get());
@@ -242,6 +255,12 @@ ToolbarWindow::ToolbarWindow(QWidget *parent)
             m_profilesComboBox->addItem("Default", QVariant::fromValue(currentWindowPositions()));
         });
     });
+}
+
+ToolbarWindow::~ToolbarWindow()
+{
+    delete m_snapWinPrim;
+    delete m_snapWinSec;
 }
 
 void ToolbarWindow::logText(const QString &msg)

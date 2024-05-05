@@ -14,12 +14,15 @@
 #include <QVector>
 
 class QTextBrowser;
+class PrimarySnapWindow;
+class SecondarySnapWindow;
 
 class ToolbarWindow : public QWidget
 {
     Q_OBJECT
 public:
     explicit ToolbarWindow(QWidget *parent = nullptr);
+    ~ToolbarWindow();
 
     void logText(const QString &msg);
 
@@ -43,4 +46,7 @@ private:
 
     QTextBrowser *m_logWidget;
     QComboBox *m_profilesComboBox;
+
+    PrimarySnapWindow *m_snapWinPrim;
+    SecondarySnapWindow *m_snapWinSec;
 };

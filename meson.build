@@ -35,11 +35,13 @@ add_project_arguments(
 # Sources
 mwsdi_hdr = [
     'toolbarwindow.h',
+    'snapwindows.h',
 ]
 
 mwsdi_src = [
     'main.cpp',
     'utils.cpp',
+    'snapwindows.cpp',
     'toolbarwindow.cpp',
 ]
 
