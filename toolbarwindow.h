@@ -22,7 +22,7 @@ class ToolbarWindow : public QWidget
     Q_OBJECT
 public:
     explicit ToolbarWindow(QWidget *parent = nullptr);
-    ~ToolbarWindow();
+    ~ToolbarWindow() override;
 
     void logText(const QString &msg);
 
@@ -35,6 +35,8 @@ protected:
 private:
     QHash<QWidget *, QRect> currentWindowPositions();
     void loadSelectedWinPositionProfile();
+    void setupTopSideLayout();
+    void setupBottomLayout();
 
     bool m_windowsPositioned{false};
     QRect m_zoneRect;

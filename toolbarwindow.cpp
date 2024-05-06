@@ -27,7 +27,7 @@ static const int outputHeight = 100;  // "Output" window at the bottom
 class RotatedLabel : public QLabel
 {
 public:
-    RotatedLabel(const QString &text, QWidget *parent = nullptr)
+    explicit RotatedLabel(const QString &text, QWidget *parent = nullptr)
         : QLabel(text, parent)
     {
         QFont font = this->font();
@@ -222,45 +222,66 @@ ToolbarWindow::ToolbarWindow(QWidget *parent)
     auto label = new RotatedLabel("Some very important content", m_mainWindow.get());
     mainLayout->addWidget(label, 0, Qt::AlignCenter);
 
-    // On X11 with client-side decoration, we have no idea when our window will be decorated,
-    // so we use a silly timer to get a good chance of having the right dimensions.
-    // On Wayland, this issue can be easily resolved by using xdg-decoration and ext-placement,
-    // which do not replicate this issue.
-    QTimer::singleShot(50, this, [this] {
-        const auto toolbarBottom = frameGeometry().y() + frameGeometry().height();
+    // set window properties
+    m_sidebarWindow->setWindowTitle("Sidebar Window");
+    m_mainWindow->setWindowTitle("Main Window");
+    m_outputWindow->setWindowTitle("Output Window");
 
-        // Position the sidebar window
-        m_sidebarWindow->setGeometry(0, 0, sidebarWidth, m_zoneRect.height() - frameGeometry().height() - outputHeight);
-        m_sidebarWindow->move(m_zoneRect.x(), toolbarBottom);
-        m_sidebarWindow->setWindowTitle("Sidebar Window");
-        m_sidebarWindow->show();
-
-        // Update the position for the next window
-        const auto mainHeight = m_sidebarWindow->frameGeometry().height();
-
-        // Position the main window
-        m_mainWindow->setGeometry(0, 0, m_zoneRect.width() - sidebarWidth, mainHeight);
-        m_mainWindow->move(m_sidebarWindow->frameGeometry().right() + 1, toolbarBottom);
-        m_mainWindow->setWindowTitle("Main Window");
-        m_mainWindow->show();
-
+    const auto platformName = QGuiApplication::platformName();
+    qDebug().noquote() << "Running on platform:" << platformName;
+    if (platformName == QStringLiteral("xcb")) {
+        // On X11 with client-side decoration, we have no idea when our window will be decorated,
+        // so we use a silly timer to get a good chance of having the right dimensions.
+        // On Wayland, this issue can be easily resolved by using xdg-decoration and ext-placement,
+        // which do not replicate this issue.
         QTimer::singleShot(50, this, [this] {
-            // Position the output window
-            m_outputWindow->setGeometry(0, 0, m_zoneRect.width(), outputHeight);
-            m_outputWindow->move(m_zoneRect.x(), m_mainWindow->frameGeometry().bottom() + 1);
-            m_outputWindow->setWindowTitle("Output Window");
-            m_outputWindow->show();
+            setupTopSideLayout();
 
-            // create our default window position profile
-            m_profilesComboBox->addItem("Default", QVariant::fromValue(currentWindowPositions()));
+            QTimer::singleShot(50, this, [this] {
+                setupBottomLayout();
+            });
         });
-    });
+    } else {
+        setupTopSideLayout();
+        setupBottomLayout();
+    }
 }
 
 ToolbarWindow::~ToolbarWindow()
 {
     delete m_snapWinPrim;
     delete m_snapWinSec;
+}
+
+void ToolbarWindow::setupTopSideLayout()
+{
+    const auto toolbarBottom = frameGeometry().y() + frameGeometry().height();
+
+    // Position the sidebar window
+    m_sidebarWindow->setGeometry(0, 0, sidebarWidth, m_zoneRect.height() - frameGeometry().height() - outputHeight);
+    m_sidebarWindow->move(m_zoneRect.x(), toolbarBottom);
+    m_sidebarWindow->show();
+
+    // Update the position for the next window
+    const auto mainHeight = m_sidebarWindow->frameGeometry().height();
+
+    // Position the main window
+    m_mainWindow->setGeometry(0, 0, m_zoneRect.width() - sidebarWidth, mainHeight);
+    m_mainWindow->move(m_sidebarWindow->frameGeometry().right() + 1, toolbarBottom);
+    m_mainWindow->show();
+}
+
+void ToolbarWindow::setupBottomLayout()
+{
+    // Position the output window
+    m_outputWindow->setGeometry(0, 0, m_zoneRect.width(), outputHeight);
+    m_outputWindow->move(m_zoneRect.x(), m_mainWindow->frameGeometry().bottom() + 1);
+
+    m_outputWindow->show();
+
+    // create our default window position profile
+    m_profilesComboBox->clear();
+    m_profilesComboBox->addItem("Default", QVariant::fromValue(currentWindowPositions()));
 }
 
 void ToolbarWindow::logText(const QString &msg)
