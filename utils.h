@@ -8,4 +8,4 @@
 
 #include <QRect>
 
-QRect multiWindowZone(double percentageOfMax = 0.94);
+QRect multiWindowZone(double percentageOfMax = 0.90);
