@@ -16,7 +16,7 @@ In reality, no application will likely use all of these multiwindow paradigms al
 
 ### Initial Window Placement
 
-<a href="graphics/demo/initial-layout.avif">
+<a href="https://github.com/ximion/multiwindow-pattern-demo/raw/main/graphics/demo/initial-layout.avif">
   <img src="graphics/demo/initial-layout.avif" style="max-height:600px;"
     alt="Multiple windows with correct initial placement" />
 </a>
@@ -26,7 +26,7 @@ occupying about 90% of the space designated for the application.
 
 ### Layout Profiles
 
-<a href="graphics/demo/layout-profiles.avif">
+<a href="https://github.com/ximion/multiwindow-pattern-demo/raw/main/graphics/demo/layout-profiles.avif">
   <img src="graphics/demo/layout-profiles.avif" style="max-height:600px;"
     alt="Window layouts can be created and restored" />
 </a>
@@ -38,7 +38,7 @@ This is a very common pattern in many scientific applications.
 
 ### Floating Windows
 
-<a href="graphics/demo/float-on-top.avif">
+<a href="https://github.com/ximion/multiwindow-pattern-demo/raw/main/graphics/demo/float-on-top.avif">
   <img src="graphics/demo/float-on-top.avif" style="max-height:600px;"
     alt="Window can permanently float on top" />
 </a>
@@ -48,7 +48,7 @@ This is usually done for toolboxes and palettes and heavily used in DAW applicat
 
 ### Window creation at coordinates
 
-<a href="graphics/demo/window-at-cursor.avif">
+<a href="https://github.com/ximion/multiwindow-pattern-demo/raw/main/graphics/demo/window-at-cursor.avif">
   <img src="graphics/demo/window-at-cursor.avif" style="max-height:600px;"
     alt="Window is created at cursor position" />
 </a>
@@ -59,7 +59,7 @@ UI element of the application, with a defined offset.
 
 ### Window snapping / attachment
 
-<a href="graphics/demo/snap-attach.avif">
+<a href="https://github.com/ximion/multiwindow-pattern-demo/raw/main/graphics/demo/snap-attach.avif">
   <img src="graphics/demo/snap-attach.avif" style="max-height:600px;"
     alt="Permanently attach / snap windows to other windows" />
 </a>
